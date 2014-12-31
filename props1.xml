@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<props lev="2">
+	
+	<prop name="http://dbpedia.org/ontology/wikiPageWikiLink"></prop>
+	<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+	<prop name="http://purl.org/dc/terms/subject"></prop>
+	<prop name="http://dbpedia.org/ontology/operatingSystem"></prop>
+	<prop name="http://dbpedia.org/ontology/programmingLanguage"></prop>
+	<prop name="http://dbpedia.org/ontology/computingPlatform"></prop>
+	<prop name="http://dbpedia.org/ontology/industry"></prop>
+	<prop name="http://dbpedia.org/ontology/genre"></prop>
+	<prop name="http://www.w3.org/2004/02/skos/core#broader"></prop>
+	<prop name="http://www.w3.org/2002/07/owl#subClassOf"></prop>
+	
+</props>

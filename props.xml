@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<props>
+	
+	<prop name="http://dbpedia.org/ontology/musicComposer">
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://dbpedia.org/ontology/musicComposer"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+	</prop>
+	
+	<prop name="http://dbpedia.org/ontology/cinematography">
+		<prop name="http://dbpedia.org/ontology/cinematography"></prop>
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+	</prop>
+	
+	<prop name="http://dbpedia.org/ontology/director">
+		<prop name="http://dbpedia.org/ontology/director"></prop>
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+		<prop name="http://dbpedia.org/ontology/starring"></prop>
+	</prop>
+	
+	<prop name="http://dbpedia.org/ontology/wikiPageWikiLink"></prop>  
+  	
+  	<prop name="http://dbpedia.org/ontology/producer">
+		<prop name="http://dbpedia.org/ontology/director"></prop>
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://dbpedia.org/ontology/writer"></prop>
+		<prop name="http://dbpedia.org/ontology/producer"></prop>
+		<prop name="http://dbpedia.org/ontology/editing"></prop>
+		<prop name="http://dbpedia.org/ontology/starring"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+	</prop>   
+	
+	<prop name="http://dbpedia.org/ontology/distributor">
+		<prop name="http://dbpedia.org/ontology/distributor"></prop>
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+	</prop>  
+	
+	<prop name="http://purl.org/dc/terms/subject">
+ 		<prop name="http://purl.org/dc/terms/subject"></prop>
+		<prop name="http://www.w3.org/2004/02/skos/core#broader"></prop>
+	</prop> 
+	
+	<prop name="http://dbpedia.org/ontology/starring">
+		<prop name="http://dbpedia.org/ontology/musicComposer"></prop>
+		<prop name="http://dbpedia.org/ontology/director"></prop>
+		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+		<prop name="http://dbpedia.org/ontology/writer"></prop>
+		<prop name="http://dbpedia.org/ontology/producer"></prop>
+		<prop name="http://dbpedia.org/ontology/editing"></prop>
+		<prop name="http://purl.org/dc/terms/subject"></prop>
+		<prop name="http://dbpedia.org/ontology/starring"></prop>
+	</prop>
+	
+</props>
