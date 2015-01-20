@@ -13,6 +13,6 @@ This library was originally developed by Vito Mastromarino for his Master thesis
 Contacts
 ------------
 Tommaso Di Noia, tommaso [dot] dinoia [at] poliba [dot] it  
-Vito Mastromarino, zlatanito88 [at] gmail [dot] com
+Vito Mastromarino, zlatanito88 [at] gmail [dot] com  
 Vito Claudio Ostuni, vitoclaudio [dot] ostuni [at] poliba [dot] it  
 
