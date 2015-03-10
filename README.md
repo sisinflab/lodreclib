@@ -8,11 +8,12 @@ lodreclib is a Java library to build recommendation engines which exploit the in
 
 Credits
 ------------
-This library was originally developed by Vito Mastromarino for his Master thesis at Polytechnic University of Bari under the supervision of Tommaso Di Noia and Vito Claudio Ostuni.  
+This library was originally developed by Vito Mastromarino for his Master thesis at Polytechnic University of Bari under the supervision of Tommaso Di Noia, Vito Claudio Ostuni and Paolo Tomeo.  
 
 Contacts
 ------------
 Tommaso Di Noia, tommaso [dot] dinoia [at] poliba [dot] it  
 Vito Mastromarino, zlatanito88 [at] gmail [dot] com  
 Vito Claudio Ostuni, vitoclaudio [dot] ostuni [at] poliba [dot] it  
+Paolo Tomeo, paolo [dot] tomeo [at] poliba [dot] it  
 
