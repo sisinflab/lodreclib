@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <props>
 	
+    <prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
+    
 	<prop name="http://dbpedia.org/ontology/musicComposer">
 		<prop name="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"></prop>
 		<prop name="http://dbpedia.org/ontology/musicComposer"></prop>
@@ -39,8 +41,7 @@
 	</prop>  
 	
 	<prop name="http://purl.org/dc/terms/subject">
- 		<prop name="http://purl.org/dc/terms/subject"></prop>
-		<prop name="http://www.w3.org/2004/02/skos/core#broader"></prop>
+ 		<prop name="http://www.w3.org/2004/02/skos/core#broader"></prop>
 	</prop> 
 	
 	<prop name="http://dbpedia.org/ontology/starring">

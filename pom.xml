@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>lodreclib</groupId>
-  <artifactId>lodreclib</artifactId>
-  <version>0.0.1</version>
+  <groupId>LODRec</groupId>
+  <artifactId>LODRec</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
   <build>
 		
@@ -17,18 +17,14 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>${exec.maven.version}</version>
 				<configuration>
-					<mainClass>RDFTripleExtractorMultiThread</mainClass>
+					<mainClass>it.poliba.sisinflab.LODRec.main.Main</mainClass> 
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>2.7</version>
 			</plugin>
 		</plugins>
   
@@ -60,19 +56,13 @@
 			<artifactId>trove4j</artifactId>
 			<version>3.0.3</version>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>de.bwaldvogel</groupId>
-			<artifactId>liblinear</artifactId>
-			<version>1.95</version>
-		</dependency>
+	    <groupId>de.bwaldvogel</groupId>
+	    <artifactId>liblinear</artifactId>
+	    <version>1.94</version>
+	</dependency>
+	
   </dependencies>
   
-  <name>lodreclib - Linked Open Data Recommender Systems Library</name>
-  <url>https://github.com/sisinflab/lodreclib</url>
-  <description>A Java library to built recommender systems fed by Linked (Open) Data </description>
-  <organization>
-  	<name>Information Systems Lab @ Polytechnic Univesrsity of Bari</name>
-  	<url>http://sisinflab.poliba.it</url>
-  </organization>
 </project>
