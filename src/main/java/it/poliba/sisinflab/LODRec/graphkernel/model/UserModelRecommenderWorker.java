@@ -2,6 +2,7 @@ package it.poliba.sisinflab.LODRec.graphkernel.model;
 
 import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.hash.TObjectFloatHashMap;
 import gnu.trove.set.hash.TIntHashSet;
 import it.poliba.sisinflab.LODRec.evaluation.Evaluator;
 import it.poliba.sisinflab.LODRec.recommender.Recommender;
@@ -61,6 +62,9 @@ public class UserModelRecommenderWorker implements Runnable {
 	private int minTrainEx; // = 100;
 
 	private int u;
+	
+	private int topK;
+	private String metric;
 
 	// private int n_features;
 
@@ -74,8 +78,10 @@ public class UserModelRecommenderWorker implements Runnable {
 			List<Integer> listSolverType, Map<Integer, Float> userTrainRatings,
 			Map<Integer, Float> userValRatings, boolean implicit,
 			int nValidNegEx, boolean addNegValidationEx, int timesRealFb, int minTrainEx,
-			HashSet<Integer> items, float relUnknownItems) {
+			HashSet<Integer> items, float relUnknownItems, int topK, String metric) {
 
+		this.topK = topK;
+		this.metric = metric;
 		this.u = u;
 		this.bw = bw;
 		this.map_item_intFeatures = map_item_intFeatures;
@@ -212,6 +218,8 @@ public class UserModelRecommenderWorker implements Runnable {
 
 		Set<Integer> trainNegItems = new HashSet<Integer>();
 		Set<Integer> valNegItems = new HashSet<Integer>();
+		
+		TObjectFloatHashMap<String> evalRes = new TObjectFloatHashMap<String>();
 
 		// System.out.println("n.user train ratings at the beginning " +
 		// userTrainRatings.size());
@@ -295,7 +303,6 @@ public class UserModelRecommenderWorker implements Runnable {
 		double bestPerf = 0, bestPerfTrain = 0, bestC = 0, bestEps=0;
 		Model bestModel = null;
 		int bestModelType = 0;
-		int k_modeSel = 25;
 
 		long start=System.currentTimeMillis();
 		try {
@@ -326,9 +333,18 @@ public class UserModelRecommenderWorker implements Runnable {
 						Map<Integer, List<Integer>> validRecc = pred
 								.computeRecc(XValid, validUserIndex,
 										validItemIndex, implicit);
+						
+						evalRes = validEval.eval(validRecc);
+						
+						float perf = evalRes.get(metric);
+						if (perf >= bestPerf) {
 
-						validEval.eval(validRecc, valMapNDCG, valMapPrec,
-								valMapRec);
+							bestPerf = perf;
+							bestModel = model;
+							bestModelType = solverType;
+							bestC = c;
+							bestEps = eps;
+						}
 
 						// System.out.println(" config -- model: "
 						// + parameter.getSolverType() + ". C: "
@@ -336,16 +352,6 @@ public class UserModelRecommenderWorker implements Runnable {
 						// + parameter.getEps() + ". validationset prec: "
 						// + valMapPrec + ". validationset rec: "
 						// + valMapRec);
-
-						if (valMapPrec.get(k_modeSel) > bestPerf) {
-							// bestPerf = valMapNDCG.get(k_modeSel);
-							bestPerf = valMapPrec.get(k_modeSel);
-							// bestPerfTrain =trainMapNDCG.get(k_modeSel);
-							bestModel = model;
-							bestModelType = solverType;
-							bestC = c;
-							bestEps = eps;
-						}
 
 					}
 				}
@@ -364,9 +370,9 @@ public class UserModelRecommenderWorker implements Runnable {
 		// .println("-----------------------------------------------------------------");
 		System.out
 				.println("-----------------------------------------------------------------");
-		System.out.println("user " + u+" ---------BEST MODEL " + bestModelType + ". C: "
-				+ bestC + ", eps: " + bestEps + " . bestPREC_" + k_modeSel
-				+ ": " + bestPerf + " n.train ex "
+		System.out.println("user " + u + " --------- BEST MODEL " + bestModelType + ". C: "
+				+ bestC + ", eps: " + bestEps + " . Metric " + metric + "@" + topK + ": " 
+				+ bestPerf + " n.train ex "
 				+ userTrainRatings.keySet().size() + " n.valid ex "
 				+ userValRatings.keySet().size()+" tot time: " +(stop-start)/1000);
 

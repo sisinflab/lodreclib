@@ -2,9 +2,6 @@ package it.poliba.sisinflab.LODRec.sprank.itemPathExtractor;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import gnu.trove.iterator.TIntIntIterator;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.hash.THashMap;
@@ -43,8 +40,6 @@ public class ItemPathExtractorWorker implements Runnable {
 	private int main_item_id;
 	private TIntObjectHashMap<TIntHashSet> items_link;
 	
-	private static Logger logger = LogManager.getLogger(ItemPathExtractorWorker.class.getName());
-	
 	/**
 	 * Constuctor
 	 */
@@ -78,16 +73,7 @@ public class ItemPathExtractorWorker implements Runnable {
 		
 		main_item_id = main_item.getItemId();
 		
-		logger.debug("item " + main_item_id + ": start paths extraction");
-		
-		long start = System.currentTimeMillis();
-		
 		start();
-		
-		long stop = System.currentTimeMillis();
-		
-		logger.debug("item " + main_item_id + ": paths extraction terminated in [sec]: " 
-					+ ((stop - start) / 1000));
 		
 	}
 	
@@ -95,8 +81,6 @@ public class ItemPathExtractorWorker implements Runnable {
 	 * start path extraction considering all the pairs main_item-items
 	 */
 	private void start(){
-		
-		int count = 0; // number of computed pairs
 		
 		TIntIntHashMap paths = null;
 		String item_pair_paths = "";
@@ -113,7 +97,6 @@ public class ItemPathExtractorWorker implements Runnable {
 			
 			if(start){
 				
-				count++;
 				paths = computePaths(main_item, b);
 				
 				if(paths.size() > 0){
@@ -165,9 +148,6 @@ public class ItemPathExtractorWorker implements Runnable {
 			}
 			
 		}
-		
-		logger.debug("item " + main_item_id + ": paths extraction completed (computed pairs "+count+")");
-		 
 	}
 	
 	private int reverse(int k){
@@ -210,6 +190,7 @@ public class ItemPathExtractorWorker implements Runnable {
 		
 			for(String s : branches_a.keySet()){
 				
+				// per item collegati in un solo hop
 				if(input_metadata_id.containsKey(b_id)){
 					if(branches_a.get(s).containsKey(input_metadata_id.get(b_id)))
 						items_path.put(extractKey(s), branches_a.get(s).get(input_metadata_id.get(b_id)));

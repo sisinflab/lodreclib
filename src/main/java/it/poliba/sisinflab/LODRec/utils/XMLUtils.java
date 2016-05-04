@@ -1,6 +1,5 @@
 package it.poliba.sisinflab.LODRec.utils;
 
-import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import it.poliba.sisinflab.LODRec.tree.NNode;
 import it.poliba.sisinflab.LODRec.tree.NTree;
@@ -20,8 +19,8 @@ import org.xml.sax.SAXException;
 
 public class XMLUtils {
 	
-	public static void parseXMLFile(String file, TObjectIntHashMap<String> props_index, NTree props_tree, 
-			boolean directed) throws ParserConfigurationException, SAXException, IOException{
+	public static void parseXMLFile(String file, TObjectIntHashMap<String> props_index, 
+			NTree props_tree, boolean directed) throws ParserConfigurationException, SAXException, IOException{
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -42,14 +41,14 @@ public class XMLUtils {
 		
 		if(root.hasAttributes()){
 			
-			int lev = Integer.parseInt(root.getAttributes().item(0).getNodeValue());
-			if(lev>1){
+			int hop = Integer.parseInt(root.getAttributes().item(0).getNodeValue());
+			if(hop > 1){
 				ArrayList<NNode> props_to_reply = new ArrayList<NNode>();
 				
 				for(NNode node : root_node.getChilds())
 					props_to_reply.add(new NNode(node.getValue()));
 				
-				constructTree(root_node.getChilds(), props_to_reply, lev-1);
+				constructTree(root_node.getChilds(), props_to_reply, hop-1);
 			}
 		}
 		

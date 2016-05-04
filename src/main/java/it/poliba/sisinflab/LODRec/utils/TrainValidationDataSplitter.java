@@ -5,7 +5,6 @@ import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TFloatHashSet;
 import gnu.trove.set.hash.TIntHashSet;
 
 import java.io.BufferedReader;
@@ -18,8 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
-import ciir.umass.edu.utilities.MyThreadPool;
 
 public class TrainValidationDataSplitter {
 	private Set<Integer> items;
@@ -345,7 +342,7 @@ public class TrainValidationDataSplitter {
 		
 
 		
-		System.out.println("Movielens");
+		/*System.out.println("Movielens");
 		splitter.analyze("ML/ratings/TrainSetML_65_15_20_reduced_min50", "ML/ratings/ValidSetML_65_15_reduced_min50", "ML/ratings/TestSetML_80_20_reduced_min50", "ML/itemMetadata");
 		
 		System.out.println("Library");
@@ -353,13 +350,14 @@ public class TrainValidationDataSplitter {
 		
 		System.out.println("LastFM");
 		splitter.analyze("LF/feedback/TrainSetLF_65_15_20_percentile_rank_norm_reduced_v2_noNegExam", "LF/feedback/ValidSetLF_15_20_percentile_rank_norm_reduced_v2_noNegExam", "LF/feedback/TestSetLF_80_20_percentile_rank_norm_reduced_v2", "LF/itemMetadata");
+		*/
 		
-		// boolean implicit=false;
-		// int n_users=1000000;
-		// splitter.buildTrainValTestRatings("TrainSetLF_80_20_percentile_rank_norm_reduced_v2_noNegExam",
-		// "TrainSetLF_65_15_20_percentile_rank_norm_reduced_v2_noNegExam",
-		// "ValidSetLF_15_20_percentile_rank_norm_reduced_v2_noNegExam",
-		// "XXX", 0.2f, 0f, 0, 3 ,implicit, n_users);
+		 boolean implicit=false;
+		 int n_users=1000000;
+		 splitter.buildTrainValTestRatings("ml_sample/TrainSetML_80_20_reduced_min50",
+		 "ml_sample/TrainSetML_80_20",
+		 "ml_sample/ValidationSetML_80_20",
+		 "XXX", 0.2f, 0f, 0, 3 ,implicit, n_users);
 
 	}
 

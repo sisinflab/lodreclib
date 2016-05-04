@@ -293,7 +293,7 @@ public class MultiPropQueryExecutor implements Runnable {
 	/**
 	 * Run SPARQL query 
 	 * @param     uri  uri resource
-	 * @param     p  property
+	 * @param     props	list of properties
 	 * @return    results map: uri-s (if uri is a subject), uri-o (if uri is an object)
 	 */
 	private THashMap<String, TObjectCharHashMap<String>> runQuery(String uri, ArrayList<String> props){

@@ -64,6 +64,10 @@ public class UserModelRecommender {
 	private String listStrEps;
 	private String itemMetadataFile;
 	
+	private String evalMetric;
+	private String metric;
+	private int topK;
+	
 	private static Logger logger = LogManager
 			.getLogger(UserModelRecommender.class.getName());
 
@@ -95,6 +99,12 @@ public class UserModelRecommender {
 		trainRatings = this.loadRatingData(trainRatingFile);
 
 		this.validationRatings = this.loadRatingData(validRatingFile);
+		
+		String[] str = evalMetric.split("@");
+    	this.topK = Integer.parseInt(str[1]);
+    	this.metric = str[0];
+
+		
 
 	}
 
@@ -104,7 +114,8 @@ public class UserModelRecommender {
 			String validationRatingFile, boolean implicit,
 			String listStrSolverType, String listStrC, String listStrEps,
 			float evalRatingThresh, float relUnknownItems, float negRatingThresh,
-			int timesRealFb, int nValidNegEx, int minTrainEx, boolean addNegValidationEx) {
+			int timesRealFb, int nValidNegEx, int minTrainEx, boolean addNegValidationEx,
+			String evalMetric) {
 
 		this.topN = topN;
 		this.nThreads = nThreads;
@@ -126,6 +137,8 @@ public class UserModelRecommender {
 		this.nValidNegEx = nValidNegEx;
 		this.minTrainEx = minTrainEx;
 		this.addNegValidationEx = addNegValidationEx;
+		
+		this.evalMetric = evalMetric;
 
 		init();
 	}
@@ -183,11 +196,9 @@ public class UserModelRecommender {
 	}
 
 	public void exec() {
-
+		
 		try {
 			bw = new BufferedWriter(new FileWriter(outFile));
-
-			List<Integer> topK = Arrays.asList(10, 25, 50);
 
 			Evaluator trainEval = new Evaluator(trainRatingFile, topK,
 					evalRatingThresh, relUnknownItems);
@@ -215,7 +226,7 @@ public class UserModelRecommender {
 						topN, num_features, listC, listEps, listSolverType,
 						userTrainRatings, userValRatings, implicit,
 						nValidNegEx, addNegValidationEx, timesRealFb, minTrainEx, items,
-						relUnknownItems);
+						relUnknownItems, topK, metric);
 				// run the worker thread
 				executor.execute(worker);
 

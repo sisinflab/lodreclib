@@ -23,11 +23,11 @@ public class NTree {
 		return root;
 	}
 	
-	public void stampa() {
-        stampa(root, 0);
+	public void print() {
+        print(root, 0);
     }
 
-    private void stampa(NNode v, int level) {
+    private void print(NNode v, int level) {
         
     	if (v == null) 
         	return;
@@ -41,7 +41,7 @@ public class NTree {
         System.out.println(v.getValue());
         
         for (NNode children : v.getChilds()) {
-            stampa(children, level + 1);
+            print(children, level + 1);
         }
     }
 

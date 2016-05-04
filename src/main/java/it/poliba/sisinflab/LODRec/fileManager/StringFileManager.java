@@ -1,7 +1,5 @@
 package it.poliba.sisinflab.LODRec.fileManager;
 
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.THashMap;
 
 import java.io.ByteArrayInputStream;
@@ -95,66 +93,6 @@ public class StringFileManager extends FileManager {
 				break;
 			
 		}
-    	
-    	return res;
-    	
-    }
-    
-    public THashMap<String, String> read(long n, TIntArrayList top_items_id){
-    	
-    	THashMap<String,String> res = new THashMap<String,String>();
-    	
-    	for(String key : file_index.keySet()){
-    		
-    		String[] items_key = key.split("-");
-			int item1 = Integer.parseInt(items_key[0]);
-			int item2 = Integer.parseInt(items_key[1]);
-			
-			if(!top_items_id.contains(item1) && !top_items_id.contains(item2))
-				file_index.remove(key);
-    		
-    	}
-    	
-    	System.out.println(file_index.size());
-    	
-    	long count = 0;
-    	TIntIterator it = top_items_id.iterator();
-    	while(it.hasNext()){
-    		
-    		if(count < n){
-	    		
-    			int top_item_id = it.next();
-	    		
-	    		for(String key : file_index.keySet()){
-	    			
-	    			if(count<n){
-	    				
-	    				String[] items_key = key.split("-");
-		    			int item1 = Integer.parseInt(items_key[0]);
-		    			int item2 = Integer.parseInt(items_key[1]);
-		    			
-		    			if(item1 == top_item_id || item2 == top_item_id){
-		    				
-		    				String tmp = read(key);
-		    				if(!res.containsKey(key)){
-		    					res.put(key, tmp);
-		    					count++;
-		    				}
-		    				
-		    			}
-	    				
-	    			}
-	    			else
-	    				break;
-	    			
-	    		}
-	    		
-	    		System.out.println("item " + top_item_id + " paths loaded ("+ res.size() +")");
-	    		
-    		}
-    		else break;
-    		
-    	}
     	
     	return res;
     	

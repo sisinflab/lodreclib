@@ -1,6 +1,6 @@
 package it.poliba.sisinflab.LODRec.sparqlDataExtractor;
 
-import gnu.trove.map.hash.TObjectCharHashMap;
+import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import it.poliba.sisinflab.LODRec.fileManager.ItemFileManager;
 import it.poliba.sisinflab.LODRec.fileManager.TextFileManager;
@@ -28,46 +28,39 @@ import com.hp.hpl.jena.rdf.model.Model;
 /**
  * This class is part of the LOD Recommender
  * 
- * This class is used by RDFTripleExtractor for multi-threading RDF triples
- * extraction
+ * This class is used by RDFTripleExtractor for multi-threading RDF triples 
+ * extraction 
  * 
  * @author Vito Mastromarino
  */
 public class QueryExecutor implements Runnable {
-
+	
 	private String uri; // uri resource
 	private NTree props; // properties map
 	private TObjectIntHashMap<String> props_index; // properties index
 	private String graphURI; // graph uri
 	private String endpoint; // endpoint address
-	private SynchronizedCounter counter; // synchronized counter for metadata
-											// index
+	private SynchronizedCounter counter; // synchronized counter for metadata index
 	private TObjectIntHashMap<String> metadata_index; // metadata index
-	private TextFileManager textWriter;
+	private TextFileManager textWriter; 
 	private Model model; // local dataset model
 	private ItemTree itemTree; // item tree
 	private boolean inverseProps; // directed property
 	private ItemFileManager fileManager;
 	private boolean caching;
-	private boolean useGraphEmbeddingTextFormat = true;
-	// for grahpEmbedding
-	private StringBuffer graph_embedded;
-
-	private static final String ENTITY_DELIM = "#E";
-	private static final String PROP_DELIM = "#P";
-
-	private static Logger logger = LogManager.getLogger(QueryExecutor.class
-			.getName());
-
+	
+	private static Logger logger = LogManager.getLogger(QueryExecutor.class.getName());
+	
+	
 	/**
 	 * Constuctor
 	 */
-	public QueryExecutor(String uri, int uri_id, NTree props,
-			TObjectIntHashMap<String> props_index, String graphURI,
-			String endpoint, SynchronizedCounter counter,
-			TObjectIntHashMap<String> metadata_index,
-			TextFileManager textWriter, ItemFileManager fileManager,
-			boolean inverseProps, boolean caching) {
+	public QueryExecutor(String uri, int uri_id, NTree props, 
+			TObjectIntHashMap<String> props_index, String graphURI, String endpoint, 
+			SynchronizedCounter counter, TObjectIntHashMap<String> metadata_index, 
+			TextFileManager textWriter, ItemFileManager fileManager, boolean inverseProps, 
+			boolean caching, Model model){
+
 		this.uri = uri;
 		this.props = props;
 		this.props_index = props_index;
@@ -81,400 +74,293 @@ public class QueryExecutor implements Runnable {
 		this.inverseProps = inverseProps;
 		this.itemTree = new PropertyIndexedItemTree(uri_id);
 		this.caching = caching;
-		this.graph_embedded = new StringBuffer();
-		this.graph_embedded.append(uri_id + "\t");
-	}
-
-	/**
-	 * Constuctor for local dataset query
-	 */
-	public QueryExecutor(String uri, int uri_id, NTree props,
-			TObjectIntHashMap<String> props_index, String graphURI,
-			String endpoint, SynchronizedCounter counter,
-			TObjectIntHashMap<String> metadata_index,
-			TextFileManager textWriter, ItemFileManager fileManager,
-			boolean inverseProps, boolean caching, Model model) {
-
-		this(uri, uri_id, props, props_index, graphURI, endpoint, counter,
-				metadata_index, textWriter, fileManager, inverseProps, caching);
 		this.model = model;
 	}
-
+	
 	/**
 	 * Start RDF triple extraction for selected uri
 	 */
-	public void run() {
-
+	public void run(){
+		
 		logger.info(uri + ": start data extraction");
-
+		
 		long start = System.currentTimeMillis();
-
+		
 		NNode root = props.getRoot();
-
+		
 		// execute query
-		if (caching)
-			execWithCaching(root, "", "", uri);
+		if(caching)
+			execWithCaching(root, "", uri);
 		else
-			exec(root, "", "", uri);
-
-		if (itemTree.size() > 0) {
-
+			exec(root, "", uri);
+		
+		if(itemTree.size()>0){
+			
 			// text file writing
-			if (textWriter != null) {
-				if (useGraphEmbeddingTextFormat)
-					textWriter.write(graph_embedded.toString());
-				else
-					textWriter.write(itemTree.serialize());
-			}
-
+			if(textWriter != null)
+				textWriter.write(itemTree.serialize());
+			
 			// binary file writing
-			if (fileManager != null)
+			if(fileManager != null)
 				fileManager.write(itemTree);
 		}
-
+		
 		long stop = System.currentTimeMillis();
-		logger.info(uri + ": data extraction terminated in [sec]: "
+		logger.info(uri + ": data extraction terminated in [sec]: " 
 				+ ((stop - start) / 1000));
-
+		
 	}
-
+	
+	
 	/**
 	 * Execute RDF triple extraction
 	 */
-	private void exec(NNode node, String list_props, String list_string_props,
-			String uri) {
-
-		if (node.hasChilds()) {
-
+	private void exec(NNode node, String list_props, String uri){
+		
+		if(node.hasChilds()){
+		
 			String p;
-
+			
 			for (NNode children : node.getChilds()) {
-
+	            
 				p = children.getValue();
 				String p_index;
-				String prop;
-				String entity;
-
-				TObjectCharHashMap<String> result = new TObjectCharHashMap<String>();
-
+				
+				TObjectByteHashMap<String> result = new TObjectByteHashMap<String>();
+				
 				result.putAll(runQuery(uri, "<" + p + ">"));
-
-				if (result.size() > 0) {
-
-					for (String uri_res : result.keySet()) {
-
+					
+				if(result.size()>0){
+					
+					for(String uri_res : result.keySet()){
+						
 						p_index = String.valueOf(props_index.get(p));
-						prop = p;
-
-						if (inverseProps) {
-							if (result.get(uri_res) == 's') {
-								p_index = String.valueOf(props_index.get("inv_"
-										+ p));
-								prop = "inv_" + p;
-							}
+							
+						if(inverseProps){
+							if(result.get(uri_res) == (byte) 1)
+								p_index = String.valueOf(props_index.get("inv_" + p));
 						}
-
-						prop = getStringProp(prop);
-						entity = getStringEntity(uri_res);
-
-						graph_embedded.append(list_string_props + prop + entity
-								+ " ");
-
-						if (list_props.length() > 0) {
-							itemTree.addBranches(list_props + "-" + p_index,
-									extractKey(uri_res));
-							exec(children, list_props + "-" + p_index,
-									list_string_props + prop + entity, uri_res);
-						} else {
+							
+						if(list_props.length()>0){
+							itemTree.addBranches(list_props + "-" + p_index, extractKey(uri_res));
+							exec(children, list_props + "-" + p_index, uri_res);
+						} else{
 							itemTree.addBranches(p_index, extractKey(uri_res));
-							exec(children, p_index, prop + entity, uri_res);
+							exec(children, p_index, uri_res);
 						}
 					}
 				}
-			}
+	        }
 		}
 	}
-
+	
+	
 	/**
 	 * Execute RDF triple extraction with caching
 	 */
-	private void execWithCaching(NNode node, String list_props,
-			String list_string_props, String uri) {
-
-		if (node.hasChilds()) {
-
+	private void execWithCaching(NNode node, String list_props, String uri){
+		
+		if(node.hasChilds()){
+		
 			String p;
-			String prop;
-			String entity;
-
+			
 			for (NNode children : node.getChilds()) {
-
+	            
 				p = children.getValue();
-
+				
 				String p_index = String.valueOf(props_index.get(p));
-				prop = getStringProp(p);
-
-				TObjectCharHashMap<String> result = new TObjectCharHashMap<String>();
-
-				if (!RDFTripleExtractor.cache.containsKey(uri)
-						|| !RDFTripleExtractor.cache.get(uri).containsKey(
-								p_index)) {
-
+				
+				TObjectByteHashMap<String> result = new TObjectByteHashMap<String>();
+				
+				if(!RDFTripleExtractor.cache.containsKey(uri) || 
+						!RDFTripleExtractor.cache.get(uri).containsKey(p_index)){
+					
 					result.putAll(runQuery(uri, "<" + p + ">"));
-
-					if (result.size() > 0) {
-
-						RDFTripleExtractor.cache
-								.putIfAbsent(
-										uri,
-										new ConcurrentHashMap<String, CopyOnWriteArrayList<String>>());
-
-						for (String uri_res : result.keySet()) {
-
+					
+					if(result.size()>0){
+						
+						RDFTripleExtractor.cache.putIfAbsent(uri, 
+								new ConcurrentHashMap<String, CopyOnWriteArrayList<String>>());
+						
+						for(String uri_res : result.keySet()){
+							
 							p_index = String.valueOf(props_index.get(p));
-
-							if (inverseProps) {
-								if (result.get(uri_res) == 's') {
-									p_index = String.valueOf(props_index
-											.get("inv_" + p));
-									prop = getStringProp("inv_" + p);
-								}
+							
+							if(inverseProps){
+								if(result.get(uri_res) == (byte) 1)
+									p_index = String.valueOf(props_index.get("inv_" + p));
 							}
-
-							entity = getStringEntity(uri_res);
-
-							graph_embedded.append(list_string_props + prop
-									+ entity + " ");
-
-							RDFTripleExtractor.cache.get(uri)
-									.putIfAbsent(p_index,
-											new CopyOnWriteArrayList<String>());
-							RDFTripleExtractor.cache.get(uri).get(p_index)
-									.add(uri_res);
-
-							if (list_props.length() > 0) {
-								itemTree.addBranches(
-										list_props + "-" + p_index,
-										extractKey(uri_res));
-								execWithCaching(children, list_props + "-"
-										+ p_index, list_string_props + prop
-										+ entity, uri_res);
+							
+							RDFTripleExtractor.cache.get(uri).putIfAbsent(p_index, 
+									new CopyOnWriteArrayList<String>());
+							RDFTripleExtractor.cache.get(uri).get(p_index).add(uri_res);
+							
+							if(list_props.length()>0){
+								itemTree.addBranches(list_props + "-" + p_index, extractKey(uri_res));
+								execWithCaching(children, list_props + "-" + p_index, uri_res);
 							} else {
-								itemTree.addBranches(p_index,
-										extractKey(uri_res));
-								execWithCaching(children, p_index, prop
-										+ entity, uri_res);
-							}
+								itemTree.addBranches(p_index, extractKey(uri_res));
+								execWithCaching(children, p_index, uri_res);
+							}				
 						}
 					}
-
+					
 				}
-
+				
 				// uri in cache
-				else {
-
+				else{
+					
 					logger.debug("Cache: " + uri);
-
-					for (String uri_res : RDFTripleExtractor.cache.get(uri)
-							.get(p_index)) {
-
-						entity = getStringEntity(uri_res);
-						graph_embedded.append(list_string_props + prop + entity
-								+ " ");
-
-						if (list_props.length() > 0) {
-							itemTree.addBranches(list_props + "-" + p_index,
-									extractKey(uri_res));
-							execWithCaching(children, list_props + "-"
-									+ p_index, list_string_props + prop
-									+ entity, uri_res);
+					
+					for(String uri_res : RDFTripleExtractor.cache.get(uri).get(p_index)){
+						if(list_props.length()>0){
+							itemTree.addBranches(list_props + "-" + p_index, extractKey(uri_res));
+							execWithCaching(children, list_props + "-" + p_index, uri_res);
 						} else {
 							itemTree.addBranches(p_index, extractKey(uri_res));
-							execWithCaching(children, p_index, prop + entity,
-									uri_res);
+							execWithCaching(children, p_index, uri_res);
 						}
-
+							
 					}
-
-					if (inverseProps) {
-
+					
+					if(inverseProps){
+						
 						p_index = String.valueOf(props_index.get("inv_" + p));
-						prop = getStringProp("inv_" + p);
-
-						if (RDFTripleExtractor.cache.get(uri).containsKey(
-								p_index)) {
-							for (String uri_res : RDFTripleExtractor.cache.get(
-									uri).get(p_index)) {
-
-								entity = getStringEntity(uri_res);
-								graph_embedded.append(list_string_props + prop
-										+ entity + " ");
-
-								if (list_props.length() > 0) {
-									itemTree.addBranches(list_props + "-"
-											+ p_index, extractKey(uri_res));
-									execWithCaching(children, list_props + "-"
-											+ p_index, list_string_props + prop
-											+ entity, uri_res);
-								} else {
-									itemTree.addBranches(p_index,
-											extractKey(uri_res));
-									execWithCaching(children, p_index, prop
-											+ entity, uri_res);
+						
+						if(RDFTripleExtractor.cache.get(uri).containsKey(p_index)){
+							for(String uri_res : RDFTripleExtractor.cache.get(uri).get(p_index)){
+								if(list_props.length()>0){
+									itemTree.addBranches(list_props + "-" + p_index, extractKey(uri_res));
+									execWithCaching(children, list_props + "-" + p_index, uri_res);
+								} else{
+									itemTree.addBranches(p_index, extractKey(uri_res));
+									execWithCaching(children, p_index, uri_res);
 								}
 							}
 						}
 					}
 				}
-			}
+	        }
 		}
 	}
-
+	
 	/**
-	 * Run SPARQL query
-	 * 
-	 * @param uri
-	 *            uri resource
-	 * @param p
-	 *            property
-	 * @return results map: uri-s (if uri is a subject), uri-o (if uri is an
-	 *         object)
+	 * Run SPARQL query 
+	 * @param     uri  resource uri
+	 * @param     p  property
+	 * @return    results map: uri-s (if uri is a subject), uri-o (if uri is an object)
 	 */
-	private TObjectCharHashMap<String> runQuery(String uri, String p) {
-
-		TObjectCharHashMap<String> results = new TObjectCharHashMap<String>();
-
+	private TObjectByteHashMap<String> runQuery(String uri, String p){
+		
+		TObjectByteHashMap<String> results = new TObjectByteHashMap<String>();
+		
 		Query query;
 		String q;
-
-		// if (!p.contains("abstract"))
-		// q = "SELECT * WHERE {{?s " + p + " <" + uri
-		// + ">. FILTER isIRI(?s). } UNION " + "{<" + uri + "> " + p
-		// + " ?o ." + " FILTER isIRI(?o). }} ";
-		// else
-		q = "SELECT * WHERE {{?s " + p + " <" + uri + "> . } UNION " + "{<"
-				+ uri + "> " + p + " ?o . }} ";
+		
+		q = "SELECT * WHERE {{?s " + p + " <" + uri + ">. FILTER isIRI(?s). } UNION " +
+							"{<" + uri + "> " + p + " ?o ." + " FILTER isIRI(?o). }} ";
+		
 		logger.debug(q);
-
-		try {
+		
+		try {	
 			query = QueryFactory.create(q);
 			results = executeQuery(query, p);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return results;
 	}
-
+	
 	/**
-	 * Execute SPARQL query
-	 * 
-	 * @param query
-	 *            sparql query
-	 * @param p
-	 *            property
-	 * @return results map: uri-s (if uri is a subject), uri-o (if uri is an
-	 *         object)
+	 * Execute SPARQL query 
+	 * @param     query  sparql query
+	 * @param     p  property
+	 * @return    results map: uri-s (if uri is a subject), uri-o (if uri is an object)
 	 */
-	private TObjectCharHashMap<String> executeQuery(Query query, String p) {
-
-		TObjectCharHashMap<String> results = new TObjectCharHashMap<String>();
+	private TObjectByteHashMap<String> executeQuery(Query query, String p) {
+		
+		TObjectByteHashMap<String> results = new TObjectByteHashMap<String>();
 		QueryExecution qexec = null;
-
-		if (model == null) {
-			if (graphURI == null)
-				qexec = QueryExecutionFactory.sparqlService(endpoint, query); // remote
-																				// query
+		
+		if(model==null){
+			if(graphURI == null)
+				qexec = QueryExecutionFactory.sparqlService(endpoint, query); // remote query
 			else
-				qexec = QueryExecutionFactory.sparqlService(endpoint, query,
-						graphURI); // remote query
-		} else
+				qexec = QueryExecutionFactory.sparqlService(endpoint, query, graphURI); // remote query
+		} 
+		else
 			qexec = QueryExecutionFactory.create(query, model); // local query
-
-		try {
-
-			// ResultSet res = qexec.execSelect();
-			ResultSet res = ResultSetFactory.copyResults(qexec.execSelect());
-
+			
+		try{
+		
+			//ResultSet res = qexec.execSelect();
+			ResultSet res = ResultSetFactory.copyResults(qexec.execSelect()) ;
+			
 			QuerySolution qs;
 			String n;
-
+			
 			while (res.hasNext()) {
-
+				
 				qs = res.next();
-
+				
 				if (qs.get("o") == null) {
 					// get subject
 					n = qs.get("s").toString();
-
+					
 					// consider only the type "yago"
 					if (!p.contains("type"))
-						results.put(n, 's'); // target as subject
+						results.put(n, (byte) 1); // target as subject
 					else {
 						if (n.contains("yago"))
-							results.put(n, 's'); // target as subject
+							results.put(n, (byte) 1); // target as subject
 					}
-
-				} else {
+					
+				}
+				else {
 					// get object
 					n = qs.get("o").toString();
-
+					
 					// consider only the type "yago"
 					if (!p.contains("type"))
-						results.put(n, 'o'); // target as object
+						results.put(n, (byte) 0); // target as object
 					else {
 						if (n.contains("yago"))
-							results.put(n, 'o'); // target as object
+							results.put(n, (byte) 0); // target as object
 					}
 				}
-
 			}
-
 		}
-
-		catch (Exception e) {
+		
+		catch(Exception e){
 			e.printStackTrace();
-		} finally {
-			qexec.close();
 		}
-
+		finally{
+			//qexec.close();
+		}
+		
 		return results;
-
+		
 	}
-
+	
 	/**
 	 * Extract key from metadata index
-	 * 
-	 * @param s
-	 *            string to index
-	 * @return index of s
+	 * @param     s  string to index
+	 * @return    index of s
 	 */
 	private int extractKey(String s) {
-
+		
 		synchronized (metadata_index) {
-
-			if (metadata_index.containsKey(s)) {
+			
+			if(metadata_index.containsKey(s)){
 				return metadata_index.get(s);
 			} else {
 				int id = counter.value();
 				metadata_index.put(s, id);
 				return id;
 			}
-
 		}
-
-	}
-
-	private String getStringProp(String str) {
-		String[] p = str.split("/");
-		if (str.startsWith("inv_"))
-			p[p.length - 1] = "inv_" + p[p.length - 1];
-		return (PROP_DELIM + p[p.length - 1].replaceAll("[{'.,;:/\\-}]", "_"));
-	}
-
-	private String getStringEntity(String str) {
-		String[] e = str.split("/");
-		return (ENTITY_DELIM + e[e.length - 1].replaceAll("[{'.,;:/\\-}]", "_"));
 	}
 
 }

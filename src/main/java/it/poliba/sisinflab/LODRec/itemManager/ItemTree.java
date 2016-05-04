@@ -5,19 +5,19 @@ import gnu.trove.map.hash.TIntIntHashMap;
 
 public interface ItemTree{
 	
-	public void setItemId(int value);
+	void setItemId(int value);
 	
-	public int getItemId();
+	int getItemId();
 	
-	public int size();
+	int size();
 	
-	public boolean isEmpty();
+	boolean isEmpty();
 
-	public void addBranches(String key, int value);
+	void addBranches(String key, int value);
 	
-	public THashMap<String, TIntIntHashMap> getBranches();
+	THashMap<String, TIntIntHashMap> getBranches();
 	
-	public String serialize();
+	String serialize();
 	
-	public boolean equals(Object object);
+	boolean equals(Object object);
 }

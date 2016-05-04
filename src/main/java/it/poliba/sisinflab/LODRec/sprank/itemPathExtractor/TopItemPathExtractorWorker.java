@@ -60,8 +60,17 @@ public class TopItemPathExtractorWorker implements Runnable {
 	 * run path extraction
 	 */
 	public void run(){
-//		
+		
+		logger.info("item " + main_item.getItemId() + ": start paths extraction");
+		
+		long start = System.currentTimeMillis();
+		
 		start();
+		
+		long stop = System.currentTimeMillis();
+		
+		logger.info("item " + main_item.getItemId() + ": paths extraction terminated in [sec]: " 
+					+ ((stop - start) / 1000));
 		
 	}
 	

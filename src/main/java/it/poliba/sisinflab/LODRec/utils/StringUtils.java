@@ -8,9 +8,9 @@ import java.util.Collections;
 public class StringUtils {
 
 	
-	public static String extractRate(float rate, float ratingThreshold){
+	public static String extractRate(float rate, float ratesThreshold){
 		
-		if(rate > ratingThreshold)
+		if(rate > ratesThreshold)
 			return "r1";
 		else
 			return "r0";

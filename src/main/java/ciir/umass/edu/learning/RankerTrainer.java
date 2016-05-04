@@ -40,10 +40,10 @@ public class RankerTrainer {
 	}
 
 	public Ranker train(RANKER_TYPE type, List<RankList> train,
-			List<RankList> validation, int[] features, MetricScorer scorer) {
+			List<RankList> validation, int[] features, MetricScorer scorer, boolean silent) {
 		Ranker ranker = rf.createRanker(type, train, features, scorer);
 
-		//ranker.verbose = false;
+		ranker.verbose = !silent;
 
 		ranker.setValidationSet(validation);
 		long start = System.nanoTime();
