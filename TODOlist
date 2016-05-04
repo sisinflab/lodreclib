@@ -1,7 +1,0 @@
-1)sistemare i vari nomi dei parametri nel file di config. alcuni non sono intuitivi.
-2)mettere ordine per quanto riguarda i packages propertiesLearning, itemFeaturesExtractor e userFeaturesExtractor 
-3)splittare la scrittura del testset in piu parti per gruppi di utenti in modo da poter fare la predizione in multi thread sui diversi files
-es. u1-u100 -> file1
- u101-u200 -> file2
-
-4)calcolare le racc in sprank con multi threading
