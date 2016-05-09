@@ -40,15 +40,16 @@ public class ItemPathExtractorWorker implements Runnable {
 	private int main_item_id;
 	private TIntObjectHashMap<TIntHashSet> items_link;
 	
+	
 	/**
 	 * Constuctor
 	 */
-	public ItemPathExtractorWorker(SynchronizedCounter counter, 
-			TObjectIntHashMap<String> path_index, TIntObjectHashMap<String> inverse_path_index, 
-			ItemTree main_item, ArrayList<ItemTree> items, TIntObjectHashMap<String> props_index, boolean inverseProps,
-			TextFileManager textWriter, StringFileManager pathWriter, boolean select_top_path,
-			TIntIntHashMap input_metadata_id, boolean computeInversePaths,
-			TIntObjectHashMap<TIntHashSet> items_link){
+	public ItemPathExtractorWorker(SynchronizedCounter counter,
+								   TObjectIntHashMap<String> path_index, TIntObjectHashMap<String> inverse_path_index,
+								   ItemTree main_item, ArrayList<ItemTree> items, TIntObjectHashMap<String> props_index, boolean inverseProps,
+								   TextFileManager textWriter, StringFileManager pathWriter, boolean select_top_path,
+								   TIntIntHashMap input_metadata_id, boolean computeInversePaths,
+								   TIntObjectHashMap<TIntHashSet> items_link){
 		
 		this.counter = counter;
 		this.path_index = path_index;
@@ -85,69 +86,56 @@ public class ItemPathExtractorWorker implements Runnable {
 		TIntIntHashMap paths = null;
 		String item_pair_paths = "";
 		
-		// indicates the item from which to start the extraction
-		boolean start = false;
-		if(!items.contains(main_item))
-			start = true;
-		
 		for(int j = 0; j < items.size(); j++){
 			
 			ItemTree b = items.get(j);
 			int b_id = b.getItemId();
 			
-			if(start){
+			paths = computePaths(main_item, b);
 				
-				paths = computePaths(main_item, b);
-				
-				if(paths.size() > 0){
+			if(paths.size() > 0){
 					
-					item_pair_paths = main_item_id + "-" + b_id + "\t";
-					TIntIntIterator it = paths.iterator();
+				item_pair_paths = main_item_id + "-" + b_id + "\t";
+				TIntIntIterator it = paths.iterator();
+				while(it.hasNext()){
+					it.advance();
+					item_pair_paths += it.key() + "=" + it.value() + ",";
+				}
+				item_pair_paths = item_pair_paths.substring(0, item_pair_paths.length()-1);
+					
+				// text file writing
+				if(textWriter != null)
+					textWriter.write(item_pair_paths);
+				
+				// binary file writing
+				if(pathWriter != null)
+					pathWriter.write(item_pair_paths);
+					
+				if(computeInversePaths){
+					
+					item_pair_paths = b_id + "-" + main_item_id + "\t";
+					it = paths.iterator();
 					while(it.hasNext()){
 						it.advance();
-						item_pair_paths += it.key() + "=" + it.value() + ",";
+						item_pair_paths += reverse(it.key()) + "=" + it.value() + ",";
 					}
+					
 					item_pair_paths = item_pair_paths.substring(0, item_pair_paths.length()-1);
 					
 					// text file writing
 					if(textWriter != null)
 						textWriter.write(item_pair_paths);
-					
+						
 					// binary file writing
-					if(pathWriter != null)
+					if(pathWriter != null){
 						pathWriter.write(item_pair_paths);
-					
-					if(computeInversePaths){
-						
-						item_pair_paths = b_id + "-" + main_item_id + "\t";
-						it = paths.iterator();
-						while(it.hasNext()){
-							it.advance();
-							item_pair_paths += reverse(it.key()) + "=" + it.value() + ",";
-						}
-						
-						item_pair_paths = item_pair_paths.substring(0, item_pair_paths.length()-1);
-						
-						// text file writing
-						if(textWriter != null)
-							textWriter.write(item_pair_paths);
-						
-						// binary file writing
-						if(pathWriter != null){
-							pathWriter.write(item_pair_paths);
-						}
 					}
-				
 				}
 				
 			}
 			
-			if(!start){
-				if(main_item_id==b_id)
-					start = true;
-			}
-			
 		}
+		 
 	}
 	
 	private int reverse(int k){

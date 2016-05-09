@@ -14,6 +14,7 @@ import it.poliba.sisinflab.LODRec.utils.SynchronizedCounter;
 import it.poliba.sisinflab.LODRec.utils.TextFileUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -72,10 +73,10 @@ public class ItemPathExtractor {
 	 * Constuctor
 	 */
 	public ItemPathExtractor(String workingDir, String itemMetadataFile,
-			String pathFile, Boolean computeInversePaths,
-			Boolean selectTopPaths, int numTopPaths, int numItemsTopPaths, Boolean outputPathBinaryFormat,
-			Boolean outputPathTextFormat, Boolean inverseProps,
-			int itemsInMemory, int nThreads) {
+							 String pathFile, Boolean computeInversePaths,
+							 Boolean selectTopPaths, int numTopPaths, int numItemsTopPaths, Boolean outputPathBinaryFormat,
+							 Boolean outputPathTextFormat, Boolean inverseProps,
+							 int itemsInMemory, int nThreads) {
 
 		this.workingDir = workingDir;
 		this.itemsFile = itemMetadataFile;
@@ -181,6 +182,7 @@ public class ItemPathExtractor {
 		
 		//nThreads = 4;
 		logger.debug("Threads number: " + nThreads);
+		logger.info("Path extraction started");
 		
 		ExecutorService executor;
 		executor = Executors.newFixedThreadPool(nThreads);
@@ -209,20 +211,24 @@ public class ItemPathExtractor {
 			ArrayList<String> items_id = new ArrayList<String>(itemReader.getKeysIndex());
 			int num_items = items_id.size();
 			
-			ArrayList<ItemTree> items_v = null;
-			ArrayList<ItemTree> items_o = null;
 			int index_v = 0;
 			int index_o = 0;
 			
+			int index_item = 0;
+			
+			ArrayList<ItemTree> items = null;
 			ItemTree tmp = null;
 			
+			if(num_items < itemsInMemory) {
+				itemsInMemory = num_items/2;
+			}
 			
-			while(index_v < num_items){
+			while(index_v < num_items) {
 				
-				items_v = new ArrayList<ItemTree>();
-				
-				// carico itemsInMemory items in verticale
-				for(int i = index_v; i < (index_v + itemsInMemory) && i < num_items; i++){
+				// creo lista items verticali
+				ArrayList<ItemTree> items_v = new ArrayList<ItemTree>();
+				for(int i = index_v; i < (index_v + itemsInMemory) 
+						&& i < num_items; i++){
 					
 					tmp = itemReader.read(items_id.get(i));
 					
@@ -231,17 +237,17 @@ public class ItemPathExtractor {
 					
 				}
 				
-				index_o = index_v;
+				index_o = index_v + itemsInMemory;
 				
-				while(index_o < num_items){
+				while(index_o < num_items) {
 					
 					if(executor.isTerminated())
 			    		executor = Executors.newFixedThreadPool(nThreads);
 					
-					items_o = new ArrayList<ItemTree>();
-					
-					// carico itemsInMemory items in orizzontale
-					for(int i = index_o; i < (index_o + itemsInMemory) && i < num_items; i++){
+					// carico lista items in orizzontali
+					ArrayList<ItemTree> items_o = new ArrayList<ItemTree>();
+					for(int i = index_o; i < (index_o + itemsInMemory) 
+							&& i < num_items; i++){
 						
 						tmp = itemReader.read(items_id.get(i));
 						
@@ -250,49 +256,97 @@ public class ItemPathExtractor {
 						
 					}
 					
-					/*int index_item = 0;
-					ArrayList<ItemTree> items;*/
-					for(ItemTree item : items_v){
-						
-						/*if(items_o.contains(item)) {
+					if(items_o.size() > 0) {
+					
+						for(ItemTree item : items_v){
 							
-							index_item = items_o.indexOf(item);
+							Runnable worker = new ItemPathExtractorWorker(counter, path_index,
+									inverse_path_index, item, items_o, props_index, inverseProps, 
+									textWriter, pathWriter, selectTopPaths, input_metadata_id, 
+									computeInversePaths, items_link);
+							
+							executor.execute(worker);
+						}
+					
+					}
+					
+					// calcolo blocchi sulla diagonale
+					// primo blocco diagonale solo su items verticali
+					if(index_o == itemsInMemory) {
+						
+						Iterator<ItemTree> it = items_v.iterator();
+						ItemTree item = null;
+						index_item = 0;
+						while(it.hasNext()) {
+							
+							item = it.next();
+							//index_item = items_v.indexOf(item);
 							items = new ArrayList<ItemTree>();
-							items.addAll(items_o.subList(index_item + 1, items_o.size()));
+							items.addAll(items_v.subList(index_item + 1, items_v.size()));
+							
+							index_item++;
+							
+							if(items.size() > 0) {
+								
+																
+									Runnable worker = new ItemPathExtractorWorker(counter,
+											path_index, inverse_path_index, item, items, 
+											props_index, inverseProps, textWriter, 
+											pathWriter, selectTopPaths, input_metadata_id, 
+											computeInversePaths, items_link);
+							
+									executor.execute(worker);
+							}
 							
 						}
-						else {
-							items = new ArrayList<ItemTree>(items_o);
-						}*/
 						
-						//if(items.size() > 0) {
-						
-							// path extraction t-cols
-							Runnable worker = new ItemPathExtractorWorker(counter, 
-									path_index, inverse_path_index, item, items_o, 
-									props_index, inverseProps, textWriter, pathWriter, 
-									selectTopPaths, input_metadata_id, 
-									computeInversePaths, items_link);
-							// run the worker thread  
-							executor.execute(worker);
-						
-						//}
 					}
+					
+					// altri blocchi diagonali su items orizzontali
+					if(index_v == 0) {
+						
+						Iterator<ItemTree> it = items_o.iterator();
+						ItemTree item = null;
+						index_item = 0;
+						while(it.hasNext()) {
+							
+							item = it.next();
+							//index_item = items_o.indexOf(item);
+							items = new ArrayList<ItemTree>();
+							items.addAll(items_o.subList(index_item + 1, items_o.size()));
+							index_item++;
+							
+							if(items.size() > 0) {
+							
+								Runnable worker = new ItemPathExtractorWorker(counter,
+										path_index, inverse_path_index, item, items, 
+										props_index, inverseProps, textWriter, 
+										pathWriter, selectTopPaths, input_metadata_id, 
+										computeInversePaths, items_link);
+								
+								executor.execute(worker);
+							
+							}
+							
+						}
+						
+					}				
 					
 					executor.shutdown();
 					executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 					
 					index_o += itemsInMemory;
+					
 				}
-				
-				index_v += itemsInMemory;
+			
+				if(index_v + itemsInMemory < num_items - itemsInMemory)
+					index_v += itemsInMemory;
+				else 
+					index_v = num_items;
 				
 				logger.info(index_v + " of " + num_items + " items completed");
 				
 			}
-			
-			/*executor.shutdown();
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);*/
 			
 			itemReader.close();
 			

@@ -277,7 +277,7 @@ public class RDFTripleExtractor {
 			// This will make the executor accept no new threads
 			// and finish all existing threads in the queue
 			executor.shutdown();
-			// Wait until all threads are finish
+			// Wait until all threads are done
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
 			if(textWriter!=null)

@@ -15,7 +15,7 @@ import it.poliba.sisinflab.LODRec.learning.LibLinearLearner;
 import it.poliba.sisinflab.LODRec.learning.RankLibLearner;
 import it.poliba.sisinflab.LODRec.recommender.Recommender;
 import it.poliba.sisinflab.LODRec.sparqlDataExtractor.RDFTripleExtractor;
-import it.poliba.sisinflab.LODRec.sprank.itemPathExtractor.ItemPathExtractorOptimized;
+import it.poliba.sisinflab.LODRec.sprank.itemPathExtractor.ItemPathExtractor;
 import it.poliba.sisinflab.LODRec.sprank.userPathExtractor.UserPathExtractor;
 import it.poliba.sisinflab.LODRec.utils.PropertyFileReader;
 
@@ -223,7 +223,7 @@ public class Main {
 	
 	
 	public static void loadParams() {
-		
+
 		try {
 			PropertyConfigurator.configure("log4j.properties");
 			
@@ -742,11 +742,11 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("start");
 		
 		long start, stop;
 
-		// load config file
+		// read arguments
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].contains("=")) {
 
@@ -761,7 +761,7 @@ public class Main {
 
 		// load parameters from config file
 		loadParams();
-		
+		System.out.println("parameters loaded");
 		// load parameters from command line
 		loadCommandParams(args);
 
@@ -784,8 +784,8 @@ public class Main {
 		// ItemPathExtractor
 		if (itemPathExtraction & recAlgorithm == 1) {
 
-			ItemPathExtractorOptimized pe = 
-					new ItemPathExtractorOptimized(workingDir,
+			ItemPathExtractor pe =
+					new ItemPathExtractor(workingDir,
 					itemsMetadataFile, pathsFile, computeInversePaths,
 					selectTopPaths, nTopPaths, nItemTopPaths, outputPathsBinaryFormat,
 					outputPathsTextFormat, inverseProps, itemsInMemory, nThreads);
