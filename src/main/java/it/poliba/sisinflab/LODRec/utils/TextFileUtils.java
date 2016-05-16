@@ -221,10 +221,12 @@ public class TextFileUtils {
 			}
 			
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line = null;
+			String line;
 			while((line=br.readLine()) != null){
 				String[] vals = line.split("\t");
-				if(vals.length>1){
+				if(vals.length==2){
+					uri_id.put(vals[1], Integer.parseInt(vals[0]));
+				}else if(vals.length>1){
 					uri_id.put(vals[2], Integer.parseInt(vals[0]));
 				}
 				else{
