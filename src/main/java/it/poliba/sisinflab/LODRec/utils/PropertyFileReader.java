@@ -132,8 +132,8 @@ public class PropertyFileReader {
         	prop.put("ratesThreshold", props.getProperty("ratesThreshold"));
         if(props.containsKey("normalize"))
         	prop.put("normalize", props.getProperty("normalize"));
-        if(props.containsKey("splitTestSet"))
-        	prop.put("splitTestSet", props.getProperty("splitTestSet"));
+        if(props.containsKey("splitValidationSet"))
+        	prop.put("splitValidationSet", props.getProperty("splitValidationSet"));
 	    
 	    // learning
         if(props.containsKey("libLinear"))

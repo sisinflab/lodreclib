@@ -132,8 +132,8 @@ public class Main {
 	// user rates threshold (>)
 	private static float ratingThreshold = 3;
 	private static boolean normalize = true;
-	// split test set for multi-threading recommendation
-	private static boolean splitTestSet = true;
+	// split validation set for multi-threading recommendation
+	private static boolean splitValidationSet = true;
 	
 	
 	/* -------------- LEARNING ---------------- */
@@ -211,14 +211,14 @@ public class Main {
 	private static float relUnknownItems = 3;
 	private static float negRatingThresh = 2;
 	private static String itemsMetadataEvalFile = "metadata_eval";
-	private static String outputEvaluationFile = workingDir + "evaluation";
+	private static String outputEvaluationFile = "evaluation";
 	private static String recDirToEval = "";
 	
 	
 	/* -------------- RECOMMENDATION ---------------- */
 	/* ---------------------------------------------- */
 	
-	private static String recommendationsFile = workingDir + "rec";
+	private static String recommendationsFile = "rec";
 	private static int topN = 15000;	
 	
 	
@@ -397,8 +397,8 @@ public class Main {
 			if(prop.containsKey("normalize"))
 				normalize = Boolean.parseBoolean(prop.get("normalize"));
 			
-			if(prop.containsKey("splitTestSet"))
-				splitTestSet = Boolean.parseBoolean(prop.get("splitTestSet"));
+			if(prop.containsKey("splitValidationSet"))
+				splitValidationSet = Boolean.parseBoolean(prop.get("splitValidationSet"));
 			
 			// learning
 			
@@ -654,8 +654,8 @@ public class Main {
 				ratingThreshold = Integer.parseInt(val);
 			} else if (arg.compareTo("normalize") == 0) {
 				normalize = Boolean.parseBoolean(val);
-			} else if (arg.compareTo("splitTestSet") == 0) {
-				splitTestSet = Boolean.parseBoolean(val);
+			} else if (arg.compareTo("splitValidationSet") == 0) {
+				splitValidationSet = Boolean.parseBoolean(val);
 			} // learning
 			else if(arg.compareTo("silentLearning") == 0) {
 				silentLearning = Boolean.parseBoolean(val);
@@ -807,7 +807,7 @@ public class Main {
 			UserPathExtractor upe = new UserPathExtractor(workingDir,
 					inputTrainRatingFile, inputValidationRatingFile, normalize, 
 					pathsFile, itemsMetadataFile, pathsInMemory, userItemsSampling, 
-					ratingThreshold, nThreads, splitTestSet);
+					ratingThreshold, nThreads, splitValidationSet);
 
 			start = System.currentTimeMillis();
 

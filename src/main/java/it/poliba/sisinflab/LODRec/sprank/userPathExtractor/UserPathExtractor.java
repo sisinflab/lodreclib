@@ -61,9 +61,9 @@ public class UserPathExtractor {
 	private String trainFile;
 	private String validationFile;
 	private String testFile;
-	private String userpathIndexFile;
-	private boolean splitTestSet;
-	private int numUsersTestSet;
+	private String userPathIndexFile;
+	private boolean splitValidationSet;
+	private int numUsersValidationSet;
 	
 	private static Logger logger = LogManager.getLogger(UserPathExtractor.class.getName());
 	
@@ -75,7 +75,7 @@ public class UserPathExtractor {
 	public UserPathExtractor(String workingDir, String trainRatingFile,
 			String validationRatingFile, boolean normalize, String pathFile, 
 			String itemMetadataFile, int paths_in_memory, int user_items_sampling,
-			float ratingThreshold, int nThreads, boolean splitTestSet) {
+			float ratingThreshold, int nThreads, boolean splitValidationSet) {
 
 		this.workingDir = workingDir;
 		this.trainRatingFile = trainRatingFile;
@@ -87,7 +87,7 @@ public class UserPathExtractor {
 		this.user_items_sampling = user_items_sampling;
 		this.ratesThreshold = ratingThreshold;
 		this.nThreads = nThreads;
-		this.splitTestSet = splitTestSet;
+		this.splitValidationSet = splitValidationSet;
 
 		init();
 
@@ -102,7 +102,7 @@ public class UserPathExtractor {
 		this.validationFile = workingDir + "validation";
 		this.testFile = workingDir + "test";
 		
-		this.userpathIndexFile = workingDir + "user_path_index";
+		this.userPathIndexFile = workingDir + "user_path_index";
 
 		loadRatings();
 		loadItemPaths();
@@ -118,12 +118,12 @@ public class UserPathExtractor {
 		trainRatings = new TIntObjectHashMap<TIntFloatHashMap>();
 		TextFileUtils.loadInputUsersRatings(trainRatingFile, trainRatings, labels);
 		
-		if(splitTestSet)
-			numUsersTestSet = trainRatings.size()/nThreads + 1;
+		if(splitValidationSet)
+			numUsersValidationSet = trainRatings.size()/nThreads + 1;
 		else
-			numUsersTestSet = trainRatings.size();
+			numUsersValidationSet = trainRatings.size();
 		
-		logger.info("Users per test set: " + numUsersTestSet + "(" 
+		logger.info("Users per test set: " + numUsersValidationSet + "("
 				+ trainRatings.size() + ")");
 		
 		validationRatings = new TIntObjectHashMap<TIntFloatHashMap>();
@@ -256,7 +256,7 @@ public class UserPathExtractor {
 				
 				count++;
 				
-				if(count % numUsersTestSet == 0) {
+				if(count % numUsersValidationSet == 0) {
 					
 					executor.shutdown();
 					executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
@@ -292,7 +292,7 @@ public class UserPathExtractor {
 		}
 		
 		// write path index
-		TextFileUtils.writeData(userpathIndexFile, path_index);
+		TextFileUtils.writeData(userPathIndexFile, path_index);
 		
 	}
 }
