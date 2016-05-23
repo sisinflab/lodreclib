@@ -62,7 +62,6 @@ public class UserPathExtractor {
 	private String validationFile;
 	private String testFile;
 	private String userPathIndexFile;
-	private boolean splitValidationSet;
 	private int numUsersValidationSet;
 	
 	private static Logger logger = LogManager.getLogger(UserPathExtractor.class.getName());
@@ -75,7 +74,7 @@ public class UserPathExtractor {
 	public UserPathExtractor(String workingDir, String trainRatingFile,
 			String validationRatingFile, boolean normalize, String pathFile, 
 			String itemMetadataFile, int paths_in_memory, int user_items_sampling,
-			float ratingThreshold, int nThreads, boolean splitValidationSet) {
+			float ratingThreshold, int nThreads) {
 
 		this.workingDir = workingDir;
 		this.trainRatingFile = trainRatingFile;
@@ -87,7 +86,6 @@ public class UserPathExtractor {
 		this.user_items_sampling = user_items_sampling;
 		this.ratesThreshold = ratingThreshold;
 		this.nThreads = nThreads;
-		this.splitValidationSet = splitValidationSet;
 
 		init();
 
@@ -118,11 +116,8 @@ public class UserPathExtractor {
 		trainRatings = new TIntObjectHashMap<TIntFloatHashMap>();
 		TextFileUtils.loadInputUsersRatings(trainRatingFile, trainRatings, labels);
 		
-		if(splitValidationSet)
-			numUsersValidationSet = trainRatings.size()/nThreads + 1;
-		else
-			numUsersValidationSet = trainRatings.size();
-		
+		numUsersValidationSet = trainRatings.size()/nThreads + 1;
+
 		logger.info("Users per test set: " + numUsersValidationSet + "("
 				+ trainRatings.size() + ")");
 		

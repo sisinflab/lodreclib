@@ -132,8 +132,6 @@ public class Main {
 	// user rates threshold (>)
 	private static float ratingThreshold = 3;
 	private static boolean normalize = true;
-	// split validation set for multi-threading recommendation
-	private static boolean splitValidationSet = true;
 	
 	
 	/* -------------- LEARNING ---------------- */
@@ -396,10 +394,7 @@ public class Main {
 
 			if(prop.containsKey("normalize"))
 				normalize = Boolean.parseBoolean(prop.get("normalize"));
-			
-			if(prop.containsKey("splitValidationSet"))
-				splitValidationSet = Boolean.parseBoolean(prop.get("splitValidationSet"));
-			
+
 			// learning
 			
 			if(prop.containsKey("libLinear"))
@@ -654,8 +649,6 @@ public class Main {
 				ratingThreshold = Integer.parseInt(val);
 			} else if (arg.compareTo("normalize") == 0) {
 				normalize = Boolean.parseBoolean(val);
-			} else if (arg.compareTo("splitValidationSet") == 0) {
-				splitValidationSet = Boolean.parseBoolean(val);
 			} // learning
 			else if(arg.compareTo("silentLearning") == 0) {
 				silentLearning = Boolean.parseBoolean(val);
@@ -807,7 +800,7 @@ public class Main {
 			UserPathExtractor upe = new UserPathExtractor(workingDir,
 					inputTrainRatingFile, inputValidationRatingFile, normalize, 
 					pathsFile, itemsMetadataFile, pathsInMemory, userItemsSampling, 
-					ratingThreshold, nThreads, splitValidationSet);
+					ratingThreshold, nThreads);
 
 			start = System.currentTimeMillis();
 
