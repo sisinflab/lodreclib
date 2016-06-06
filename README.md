@@ -20,7 +20,7 @@ java -jar lodreclib-1.jar
 References
 ------------
 If you publish research that uses lodreclib, please cite as
-
+~~~
 @Article{DOTD16, 
   author = {Tommaso {Di Noia} and Vito Claudio Ostuni and Paolo Tomeo and Eugenio {Di Sciascio}}, 
   title = "SPRank: Semantic Path-based Ranking for Top-N Recommendations using Linked Open Data", 
@@ -29,7 +29,8 @@ If you publish research that uses lodreclib, please cite as
   note = "to appear", 
   url = "http://sisinflab.poliba.it/sisinflab/publications/2016/DOTD16" 
 }
-
+~~~
+~~~
 @Article{OODSD16, author = {
   Vito Claudio Ostuni and Sergio Oramas and Tommaso {Di Noia} and Xavier Serra and Eugenio {Di Sciascio}}, 
   title = "Sound and Music Recommendation with Knowledge Graphs", 
@@ -38,7 +39,7 @@ If you publish research that uses lodreclib, please cite as
   note = "To appear", 
   url = "http://sisinflab.poliba.it/sisinflab/publications/2016/OODSD16" 
 }
-
+~~~
 Credits
 ------------
 This library was originally developed by Vito Mastromarino for his Master thesis at Polytechnic University of Bari under the supervision of Tommaso Di Noia, Vito Claudio Ostuni and Paolo Tomeo.
