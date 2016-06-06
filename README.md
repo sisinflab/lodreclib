@@ -12,7 +12,7 @@ Using Maven, it is possible to build a runnable jar with the command
 ~~~
 mvn package
 ~~~
-and the file lodreclib.jar is executable by the command
+and is executable by the command
 ~~~
 java -jar lodreclib-0.0.1-SNAPSHOT.jar 
 ~~~
