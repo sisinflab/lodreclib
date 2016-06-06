@@ -21,15 +21,23 @@ References
 ------------
 If you publish research that uses lodreclib, please cite as
 
-@Article{DOTD16, author = {Tommaso {Di Noia} and Vito Claudio Ostuni and Paolo Tomeo and Eugenio {Di Sciascio}}, title = "SPRank: Semantic Path-based Ranking for Top-N
-Recommendations using Linked Open Data", journal = "ACM Transactions on Intelligent Systems and
-Technology (TIST)", year = "2016", note = "to appear", url = "http://sisinflab.poliba.it/sisinflab/publications/
-2016/DOTD16" }
+@Article{DOTD16, 
+  author = {Tommaso {Di Noia} and Vito Claudio Ostuni and Paolo Tomeo and Eugenio {Di Sciascio}}, 
+  title = "SPRank: Semantic Path-based Ranking for Top-N Recommendations using Linked Open Data", 
+  journal = "ACM Transactions on Intelligent Systems and Technology (TIST)", 
+  year = "2016", 
+  note = "to appear", 
+  url = "http://sisinflab.poliba.it/sisinflab/publications/2016/DOTD16" 
+}
 
-@Article{OODSD16, author = {Vito Claudio Ostuni and Sergio Oramas and Tommaso {Di Noia} and Xavier Serra and Eugenio {Di Sciascio}}, title = "Sound and Music Recommendation with Knowledge
-Graphs", journal = "ACM Transactions on Intelligent Systems and
-Technology (TIST)", year = "2016", note = "To appear", url = "http://sisinflab.poliba.it/sisinflab/publications/
-2016/OODSD16" }
+@Article{OODSD16, author = {
+  Vito Claudio Ostuni and Sergio Oramas and Tommaso {Di Noia} and Xavier Serra and Eugenio {Di Sciascio}}, 
+  title = "Sound and Music Recommendation with Knowledge Graphs", 
+  journal = "ACM Transactions on Intelligent Systems and Technology (TIST)", 
+  year = "2016", 
+  note = "To appear", 
+  url = "http://sisinflab.poliba.it/sisinflab/publications/2016/OODSD16" 
+}
 
 Credits
 ------------
