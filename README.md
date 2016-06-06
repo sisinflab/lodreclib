@@ -13,7 +13,7 @@ mvn package
 ~~~
 and the file lodreclib.jar is executable by the command
 ~~~
-java -jar lodreclib-1.jar 
+java -jar lodreclib-0.0.1-SNAPSHOT.jar 
 ~~~
 
 
