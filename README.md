@@ -6,7 +6,7 @@ lodreclib is a Java library to build recommendation engines which exploit the in
 How to use
 ------------
 Before running lodreclib, the config.properties file must be properly set. For more details about that configuration, see our [documentation](https://github.com/sisinflab/lodreclib/wiki).
-The config.properties file in the current repositories is set as an example using the Movielens dataset, whose files are in the movielens folder.
+The config.properties file in this repositoriy is set as an example using the Movielens dataset, whose files are in the movielens folder.
 
 Using Maven, it is possible to build a runnable jar with the command 
 ~~~
