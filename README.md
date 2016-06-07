@@ -1,12 +1,12 @@
 lodreclib - Linked Open Data Recommender Systems Library
 =====================
 
-lodreclib is a Java library to build recommendation engines which exploit the information encoded in Linked (Open) Data datasets. It allows to extract information from DBpedia or other RDF datasets and then to use them for generating personalized recommendations. It provides SPrank and two graph kernel methods as recommendation algorithms (for more details, see References section). 
+lodreclib is a Java library to build recommendation engines fed by Linked (Open) Data datasets. It exposes methods to extract information from DBpedia or other RDF knowledge graphs via SPARQL queries and then to use it to train your LOD-based recommender system. lodreclib comes with the implementation of SPrank and two graph kernel methods as recommendation algorithms (see References). 
 
 How to use
 ------------
-Before running lodreclib, the config.properties file must be properly set. For more details about that configuration, see our [documentation](https://github.com/sisinflab/lodreclib/wiki).
-The config.properties file in this repositoriy is set as an example using the Movielens dataset, whose files are in the movielens folder.
+Before running lodreclib, the `config.properties` file must be properly set. For more details about that configuration, see our [documentation](https://github.com/sisinflab/lodreclib/wiki).
+The `config.properties` file provided in this repositoriy is set as an example using the Movielens dataset, whose files are in the movielens folder.
 
 Using Maven, it is possible to build a runnable jar with the command 
 ~~~
@@ -20,7 +20,7 @@ java -jar lodreclib-0.0.1-SNAPSHOT.jar
 
 References
 ------------
-If you publish research that uses lodreclib, please cite as
+If you publish research that uses lodreclib, please cite it as
 ~~~
 @Article{DOTD16, 
   author = {Tommaso {Di Noia} and Vito Claudio Ostuni and Paolo Tomeo and Eugenio {Di Sciascio}}, 
