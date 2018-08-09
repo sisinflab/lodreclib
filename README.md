@@ -23,7 +23,7 @@ References
 If you publish research that uses lodreclib, please cite it as
 ~~~
 @Article{DOTD16, 
-  author = {{Di Noia}, Tommaso and Ostuni, Vito Claudio and Tomeo, Paolo and {Di Sciascio}, Eugenio},
+ author = {{Di Noia}, Tommaso and Ostuni, Vito Claudio and Tomeo, Paolo and {Di Sciascio}, Eugenio},
  title = {SPrank: Semantic Path-Based Ranking for Top-N Recommendations Using Linked Open Data},
  journal = {ACM Trans. Intell. Syst. Technol.},
  issue_date = {October 2016},
@@ -42,7 +42,7 @@ If you publish research that uses lodreclib, please cite it as
 ~~~
 ~~~
 @Article{OODSD16, author = {
-  author = {Oramas, Sergio and Ostuni, Vito Claudio and {Di Noia}, Tommaso and Serra, Xavier and {Di Sciascio}, Eugenio},
+ author = {Oramas, Sergio and Ostuni, Vito Claudio and {Di Noia}, Tommaso and Serra, Xavier and {Di Sciascio}, Eugenio},
  title = {Sound and Music Recommendation with Knowledge Graphs},
  journal = {ACM Trans. Intell. Syst. Technol.},
  issue_date = {January 2017},
