@@ -23,23 +23,41 @@ References
 If you publish research that uses lodreclib, please cite it as
 ~~~
 @Article{DOTD16, 
-  author = {Tommaso {Di Noia} and Vito Claudio Ostuni and Paolo Tomeo and Eugenio {Di Sciascio}}, 
-  title = "SPRank: Semantic Path-based Ranking for Top-N Recommendations using Linked Open Data", 
-  journal = "ACM Transactions on Intelligent Systems and Technology (TIST)", 
-  year = "2016", 
-  note = "to appear", 
-  url = "http://sisinflab.poliba.it/sisinflab/publications/2016/DOTD16" 
-}
+  author = {{Di Noia}, Tommaso and Ostuni, Vito Claudio and Tomeo, Paolo and {Di Sciascio}, Eugenio},
+ title = {SPrank: Semantic Path-Based Ranking for Top-N Recommendations Using Linked Open Data},
+ journal = {ACM Trans. Intell. Syst. Technol.},
+ issue_date = {October 2016},
+ volume = {8},
+ number = {1},
+ month = sep,
+ year = {2016},
+ issn = {2157-6904},
+ pages = {9:1--9:34},
+ articleno = {9},
+ numpages = {34},
+ doi = {10.1145/2899005},
+ publisher = {ACM},
+ keywords = {DBpedia, Learning to rank, hybrid recommender systems},
+} 
 ~~~
 ~~~
 @Article{OODSD16, author = {
-  Vito Claudio Ostuni and Sergio Oramas and Tommaso {Di Noia} and Xavier Serra and Eugenio {Di Sciascio}}, 
-  title = "Sound and Music Recommendation with Knowledge Graphs", 
-  journal = "ACM Transactions on Intelligent Systems and Technology (TIST)", 
-  year = "2016", 
-  note = "To appear", 
-  url = "http://sisinflab.poliba.it/sisinflab/publications/2016/OODSD16" 
-}
+  author = {Oramas, Sergio and Ostuni, Vito Claudio and {Di Noia}, Tommaso and Serra, Xavier and {Di Sciascio}, Eugenio},
+ title = {Sound and Music Recommendation with Knowledge Graphs},
+ journal = {ACM Trans. Intell. Syst. Technol.},
+ issue_date = {January 2017},
+ volume = {8},
+ number = {2},
+ month = oct,
+ year = {2016},
+ issn = {2157-6904},
+ pages = {21:1--21:21},
+ articleno = {21},
+ numpages = {21},
+ doi = {10.1145/2926718},
+ publisher = {ACM},
+ keywords = {Knowledge graphs, diversity, entity linking, music, novelty, recommender systems},
+} 
 ~~~
 Credits
 ------------
